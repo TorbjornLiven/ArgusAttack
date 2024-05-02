@@ -3,24 +3,40 @@ name: Issue to Text File
 on:
   issues:
     types: [opened]
-
 jobs:
   create_text_file:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        
+      - name: Remove confl chars
+        env:
+          ISSUE_BODY: ${{github.event.issue.body}}
+        uses: frabert/replace-string-action@v1.2
+        with:
+          pattern: ".\""
+          string: ${{env.ISSUE_BODY}}
+          replace-with: '-'
+
+      - name: Check_Informatin
+        id: check_info
+        run: ls -la 
+            echo "analysis_response= \
+              $("${{steps.rem_quot.outputs.replaced}}")"
+
       - name: Create text file
+        env:
+          GH_TOKEN: ${{ secrets.MY_TOKEN }}
         run: |
           echo -e "Issue Title: ${{ github.event.issue.title }}\nIssue Body: ${{ github.event.issue.body }}" > issue-${{ github.event.issue.number }}.txt
 
       - name: Commit and push changes
+        env:
+          GH_TOKEN: ${{ secrets.MY_TOKEN }}
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add issue-${{ github.event.issue.number }}.txt
           git commit -m "Add issue #${{ github.event.issue.number }} details"
           git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
