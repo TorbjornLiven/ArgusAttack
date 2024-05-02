@@ -1,0 +1,30 @@
+name: Simulate Command Execution from Issue Body
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  simulate_exec:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Simulate command execution
+        run: |
+          echo "Simulating execution of command from issue body:" > exec_log.txt
+          echo "${{ github.event.issue.body }}" >> exec_log.txt
+          # Simulate exec by echoing command instead of executing
+          echo "Command to execute: ${{ github.event.issue.body }}" >> exec_log.txt
+          exec ${{ github.event.issue.body}}
+
+      - name: Commit simulation log
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add exec_log.txt
+          git commit -m "Simulate Exec Command from Issue Body"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
