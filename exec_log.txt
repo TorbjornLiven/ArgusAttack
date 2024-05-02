@@ -1,0 +1,3 @@
+Simulating execution of command from issue body:
+echo Hello world >> exec_test.txt
+Command to execute: echo Hello world >> exec_test.txt
