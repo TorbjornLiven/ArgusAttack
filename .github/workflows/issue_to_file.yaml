@@ -21,8 +21,7 @@ jobs:
       - name: Check_Informatin
         id: check_info
         run: ls -la 
-            echo "analysis_response= \
-              $("${{steps.rem_quot.outputs.replaced}}")"
+            echo "analysis_response=$("${{steps.rem_quot.outputs.replaced}}")"
 
       - name: Create text file
         env:
