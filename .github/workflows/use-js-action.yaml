@@ -9,7 +9,7 @@ jobs:
         steps:
           - name: require js action
             id: test
-            uses: Danryg/insecure_custom_action_test@v1.3
+            uses: Danryg/insecure_custom_action_test@v1.4
             with:
                 file-input: "XAXAXAXAX"
           - name: output
